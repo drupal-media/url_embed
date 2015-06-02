@@ -1,0 +1,30 @@
+url_embed.settings:
+  type: mapping
+  label: 'URL embed settings'
+  mapping:
+    file_scheme:
+      type: string
+      label: 'File scheme for buton images'
+    upload_directory:
+      type: string
+      label: 'Upload directory for buton images'
+
+url_embed.url_button.*:
+  type: config_entity
+  label: 'URL button config'
+  mapping:
+    label:
+      type: label
+      label: 'Name'
+    id:
+      type: string
+      label: 'Machine name'
+    button_icon_uuid:
+      type: string
+      label: 'Button image'
+    display_plugins:
+      type: sequence
+      label: 'Allowed display plugins'
+      sequence:
+        type: string
+        label: 'Display plugin'
