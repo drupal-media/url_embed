@@ -1,0 +1,8 @@
+name: URL Embed
+type: module
+description: 'Allows URLs to be embedded in CKEditor'
+core: 8.x
+package: Filters
+dependencies:
+  - editor
+  - filter
