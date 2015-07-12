@@ -6,4 +6,3 @@ package: Filters
 dependencies:
   - editor
   - filter
-  - composer_manager
