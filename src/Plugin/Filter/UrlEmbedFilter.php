@@ -74,20 +74,25 @@ class UrlEmbedFilter extends FilterBase {
    */
   public function process($text, $langcode) {
     $result = new FilterProcessResult($text);
+    try{
+      if (strpos($text, 'data-embed-url') !== FALSE) {
+        $dom = Html::load($text);
+        $xpath = new \DOMXPath($dom);
 
-    if (strpos($text, 'data-embed-url') !== FALSE) {
-      $dom = Html::load($text);
-      $xpath = new \DOMXPath($dom);
-
-      foreach ($xpath->query('//*[@data-embed-url]') as $node) {
-        $url = $node->getAttribute('data-embed-url');
-        $info = Embed\Embed::create($url);
-        // $placeholder = $this->buildPlaceholder($entity, $result, $context);
-        $this->setDomNodeContent($node, $info->code);
+        foreach ($xpath->query('//*[@data-embed-url]') as $node) {
+          $url = $node->getAttribute('data-embed-url');
+          $info = Embed\Embed::create($url);
+          // $placeholder = $this->buildPlaceholder($entity, $result, $context);
+          $this->setDomNodeContent($node, $info->code);
+        }
+        $result->setProcessedText(Html::serialize($dom));
       }
-      $result->setProcessedText(Html::serialize($dom));
+      return $result;
     }
-    return $result;
+    catch(\Exception $e){
+      watchdog_exception('url_embed', $e);
+      return $text;
+    }
   }
 
   /**

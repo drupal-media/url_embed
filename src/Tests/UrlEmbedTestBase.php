@@ -19,7 +19,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('url_embed');
+  public static $modules = array('url_embed','node');
 
   /**
    * The test user.
@@ -31,7 +31,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
   /**
    * A test url to be used for embedding.
    */
-  protected $url;
+  protected $testUrl;
 
   /**
    * A set up for all tests.
@@ -63,6 +63,6 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     $this->drupalLogin($this->webUser);
 
     // Create a sample url to be embedded.
-    $this->url = 'https://youtu.be/7ipydm8guz4';
+    $this->testUrl = 'https://youtu.be/7ipydm8guz4';
   }
 }
