@@ -98,6 +98,7 @@ install:
 
 before_script:
   # Manually enable and initialize composer_manager
+  - drupal_ti_ensure_drupal
   - cd "$DRUPAL_TI_DRUPAL_DIR"
   - drush dl composer_manager --yes
   - drush pm-enable composer_manager --yes
