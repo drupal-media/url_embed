@@ -89,7 +89,6 @@ mysql:
 
 before_install:
   - composer self-update
-  #- cd ./tests
   - composer global require "lionsad/drupal_ti:1.*"
   - drupal-ti before_install
 
@@ -97,6 +96,7 @@ install:
   - drupal-ti install
 
 before_script:
+  - drupal-ti --include scripts/composer-manager.sh
   - drupal-ti before_script
 
 script:
