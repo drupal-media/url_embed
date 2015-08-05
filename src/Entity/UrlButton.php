@@ -64,13 +64,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    */
   public $button_icon_uuid;
 
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSource(){
-  }
-
   /**
    * {@inheritdoc}
    */
