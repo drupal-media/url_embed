@@ -48,7 +48,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
       'name' => 'Custom format',
     ));
     $format->save();
-
+    
     // Create a user with required permissions.
     $this->webUser = $this->drupalCreateUser(array(
       'access content',
