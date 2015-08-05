@@ -53,7 +53,7 @@ class UrlButtonAdminTest extends UrlEmbedTestBase {
     $this->drupalLogin($this->adminUser);
 
     $this->drupalGet('admin/config/content/url-button');
-    $this->assertResponse(200, 'User without admin permissions is able to visit the configuration page.');
+    $this->assertResponse(200, 'User with admin permissions is able to visit the configuration page.');
 
     // Add url button.
     $this->clickLink('Add URL Button');
