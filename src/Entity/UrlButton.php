@@ -71,14 +71,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
   public function getSource(){
   }
 
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLabel() {
-    return $this->label;
-  }
-
   /**
    * {@inheritdoc}
    */

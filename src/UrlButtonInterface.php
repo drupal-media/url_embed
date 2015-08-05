@@ -11,15 +11,7 @@ namespace Drupal\url_embed;
 /**
  * Provides an interface defining a url button entity.
  */
-interface UrlButtonInterface{
-  // extends ConfigEntityInterface {
-  /**
-   * Returns the label for the button to be shown in CKEditor toolbar.
-   *
-   * @return string
-   *   Label for the button.
-   */
-  public function getLabel();
+interface UrlButtonInterface extends ConfigEntityInterface {
 
   /**
    * Returns the URL of the button's icon.
