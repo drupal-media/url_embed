@@ -26,9 +26,9 @@ class UrlButtonListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function buildRow(EntityInterface $url) {
-    $row['label'] = $this->label();
-    return $row + parent::buildRow($url);
+  public function buildRow(EntityInterface $entity) {
+    $row['label'] = $this->getLabel($entity);
+    return $row + parent::buildRow($entity);
   }
 
 }
