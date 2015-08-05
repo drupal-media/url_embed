@@ -41,19 +41,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
 
     // Create a page content type.
     $this->drupalCreateContentType(array('type' => 'page', 'name' => 'Basic page'));
-
-    // Create Filtered HTML text format and enable url_embed filter.
-    $format = entity_create('filter_format', array(
-      'format' => 'custom_format',
-      'name' => 'Custom format',
-      'filters' => array(
-        'url_embed' => array(
-          'status' => 1,
-        ),
-      ),
-    ));
-    $format->save();
-
+    
     // Create a user with required permissions.
     $this->webUser = $this->drupalCreateUser(array(
       'access content',

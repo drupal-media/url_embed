@@ -11,7 +11,7 @@ namespace Drupal\url_embed;
 /**
  * Provides an interface defining a url button entity.
  */
-interface UrlButtonInterface extends ConfigEntityInterface {
+interface UrlButtonInterface{
 
   /**
    * Returns the URL of the button's icon.
