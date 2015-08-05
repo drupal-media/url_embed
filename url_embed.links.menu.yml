@@ -1,0 +1,5 @@
+url_button.list:
+  title: 'URL Buttons'
+  parent: system.admin_config_content
+  description: 'Configure which buttons are available in the CKEditor configuration toolbar.'
+  route_name: url_button.list
