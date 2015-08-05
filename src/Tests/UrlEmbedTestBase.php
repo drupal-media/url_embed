@@ -46,11 +46,6 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     $format = entity_create('filter_format', array(
       'format' => 'custom_format',
       'name' => 'Custom format',
-      'filters' => array(
-        'url_embed' => array(
-          'status' => 1,
-        ),
-      ),
     ));
     $format->save();
 
