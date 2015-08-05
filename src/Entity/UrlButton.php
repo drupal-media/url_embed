@@ -100,7 +100,7 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
       return $image->url();
     }
     else {
-      return file_create_url(drupal_get_path('module', 'url_embed') . '/js/plugins/drupalentity/entity.png');
+      return file_create_url(drupal_get_path('module', 'url_embed') . '/js/plugins/drupalurl/entity.png');
     }
   }
 
