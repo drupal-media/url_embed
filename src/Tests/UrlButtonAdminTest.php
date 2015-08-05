@@ -62,8 +62,6 @@ class UrlButtonAdminTest extends UrlEmbedTestBase {
     $edit = array(
       'id' => $button_id,
       'label' => $name,
-      // 'source' => 'node',#TODO : add source/provider/adapter
-      // 'oembed_provider' => 'node',#TODO : add source/provider/adapter
     );
     $this->drupalPostForm(NULL, $edit, t('Save'));
     // Ensure that the newly created button exists.

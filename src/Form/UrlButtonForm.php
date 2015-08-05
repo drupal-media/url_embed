@@ -62,8 +62,6 @@ class UrlButtonForm extends EntityForm {
   public function __construct(QueryFactory $entity_query, EntityManagerInterface $entity_manager, ConfigFactoryInterface $config_factory) {
     $this->entityQuery = $entity_query;
     $this->entityManager = $entity_manager;
-    // $this->displayPluginManager = $plugin_manager;
-    // $this->ckeditorPluginManager = $ckeditor_plugin_manager;
     $this->urlEmbedConfig = $config_factory->get('url_embed.settings');
   }
 
@@ -74,8 +72,6 @@ class UrlButtonForm extends EntityForm {
     return new static(
       $container->get('entity.query'),
       $container->get('entity.manager'),
-      // $container->get('plugin.manager.url_embed.display'),
-      // $container->get('plugin.manager.ckeditor.plugin'),
       $container->get('config.factory')
     );
   }
@@ -115,31 +111,6 @@ class UrlButtonForm extends EntityForm {
       ),
       '#disabled' => !$url_button->isNew(),
     );
-    /*
-    $form['source'] = array(
-    '#type' => 'select',
-    '#title' => $this->t('source'),
-    '#options' => $this->getFilteredEntityTypes(),#needs to be changed
-    '#default_value' => $url_button->source,
-    '#description' => $this->t("Source for which this button is to enabled."),
-    '#required' => TRUE,
-    '#ajax' => array(
-    'callback' => array($this, 'updateSourceDependentFields'),#?
-    'effect' => 'fade',
-    ),
-    );
-    $form['oembed_provider'] = array(
-    '#type' => 'select',
-    '#default_value' => $url_button->oembed,
-    '#options' => $this->getFilteredEntityTypes(),#needs to be changed
-    '#default_value' => $url_button->source,
-    '#description' => $this->t("Oembed provider used by this button."),
-    '#required' => TRUE,
-    '#ajax' => array(
-    'callback' => array($this, 'updateOembedProviderDependentFields'),#if any??
-    'effect' => 'fade',
-    ),
-    ); */
     $form['button_icon'] = array(
       '#title' => $this->t('Button image'),
       '#type' => 'managed_file',
@@ -151,26 +122,6 @@ class UrlButtonForm extends EntityForm {
         'file_validate_image_resolution' => array('16x16'),
       ),
     );
-    /*
-    $form['display_plugins'] = array(
-    '#type' => 'checkboxes',
-    '#default_value' => $url_button->display_plugins ?: array(),
-    '#prefix' => '<div id="display-plugins-wrapper">',
-    '#suffix' => '</div>',
-    );
-     */
-    // Allow option to limit display plugins.
-    /*
-    $form['display_plugins'] += array(
-    '#title' => $this->t('Allowed display plugins'),
-    '#options' => $this->displayPluginManager->getDefinitionOptionsForEntityType($entity_type_id),
-    '#description' => $this->t('If none are selected, all are allowed. Note that these are the plugins which are allowed for this entity type, all of these might not be available for the selected entity.'),
-    );
-
-    if (!isset($form['display_plugins']['#options'])) {
-    $form['display_plugins']['#options'] = array();
-    }
-     */
     return $form;
   }
 

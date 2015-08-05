@@ -57,12 +57,7 @@ class UrlButtonCrudTest extends KernelTestBase {
     $plugin = array(
       'id' => 'test_button',
       'label' => 'Testing url button instance',
-      'source' => 'node',
-    // TODO add source/adapter/provider
-      'Oembed_provider' => 'node',
-    // TODO add source/adapter/provider
       'button_icon_uuid' => '',
-      'display_plugins' => array('default'),
     );
 
     // Create an url_button with required values.
@@ -84,7 +79,6 @@ class UrlButtonCrudTest extends KernelTestBase {
       'label' => 'Testing url button instance',
       'id' => 'test_button',
       'button_icon_uuid' => '',
-      // 'display_plugins' => array('default'),
     );
 
     $this->assertIdentical($actual_properties, $expected_properties, 'Actual config properties are structured as expected.');

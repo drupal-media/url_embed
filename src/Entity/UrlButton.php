@@ -64,14 +64,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
    */
   public $button_icon_uuid;
 
-  /**
-   * Array of allowed display plugins for the URL.
-   *
-   * An empty array signifies that all are allowed.
-   *
-   * @var array
-   */
-  public $display_plugins;
 
   /**
    * {@inheritdoc}
@@ -79,11 +71,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
   public function getSource(){
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getOembedProvider(){
-  }
 
   /**
    * {@inheritdoc}
@@ -101,19 +88,6 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
     }
     else {
       return file_create_url(drupal_get_path('module', 'url_embed') . '/js/plugins/drupalurl/entity.png');
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAllowedDisplayPlugins() {
-    $allowed_display_plugins = array();
-    // Include only those plugin ids in result whose value is set.
-    foreach ($this->display_plugins as $key => $value) {
-      if ($value) {
-        $allowed_display_plugins[$key] = $value;
-      }
     }
   }
 
