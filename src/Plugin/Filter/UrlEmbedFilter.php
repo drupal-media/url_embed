@@ -97,7 +97,7 @@ class UrlEmbedFilter extends FilterBase {
    * {@inheritdoc}
    */
   public function tips($long = FALSE) {
-    @todo Add filter tips.
+    // @todo Add filter tips.
   }
 
 }
