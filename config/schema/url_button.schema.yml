@@ -1,5 +1,5 @@
 url_embed.settings:
-  type: mapping
+  type: config_object
   label: 'URL embed settings'
   mapping:
     file_scheme:
