@@ -19,7 +19,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('url_embed','node');
+  public static $modules = array('url_embed', 'node');
 
   /**
    * The test user.

@@ -1,0 +1,5 @@
+url_embed.url_button_add:
+  route_name: url_button.add
+  title: 'Add URL Button'
+  appears_on:
+    - url_button.list
