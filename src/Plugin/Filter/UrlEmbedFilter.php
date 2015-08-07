@@ -20,7 +20,7 @@ use Embed\Embed;
  * @Filter(
  *   id = "url_embed",
  *   title = @Translation("Display embedded URLs"),
- *   description = @Translation("Embeds URLs using data attribute: data-url."),
+ *   description = @Translation("Embeds URLs using data attribute: data-embed-url."),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE
  * )
  */
