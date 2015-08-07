@@ -30,7 +30,6 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
     $this->assertRaw('<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by ‮‭‬bees‬, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a>');
-    $this->assertRaw('<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by bees, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a>');
     $this->assertNoRaw('Placeholder does not appears in the output when embed is successful.');
 
     /*
