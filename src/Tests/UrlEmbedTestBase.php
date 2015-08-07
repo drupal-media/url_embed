@@ -63,6 +63,6 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     $this->drupalLogin($this->webUser);
 
     // Create a sample url to be embedded.
-    $this->sample_url = 'https://youtu.be/7ipydm8guz4';
+    $this->sample_url = 'http://www.flickr.com/photos/bees/2341623661/';
   }
 }

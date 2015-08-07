@@ -29,9 +29,11 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
     $settings['body'] = array(array('value' => $content, 'format' => 'custom_format'));
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
-    $this->assertRaw('<iframe width="480" height="270" src="https://www.youtube.com/embed/7ipydm8guz4?feature=oembed" frameborder="0" allowfullscreen=""></iframe>');
+    $this->assertRaw('<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by ‮‭‬bees‬, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a>');
+    $this->assertRaw('<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by bees, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a>');
     $this->assertNoRaw('Placeholder does not appears in the output when embed is successful.');
 
+    /*
     // Test that tag of container element is replaced when it's 'drupal-url'.
     $content = '<drupal-url data-embed-url="' . $this->sample_url . '">this placeholder should not be rendered.</drupal-url>';
     $settings = array();
@@ -53,7 +55,7 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
     $node = $this->drupalCreateNode($settings);
     $this->drupalget('node/' . $node->id());
     $this->assertRaw('<iframe width="480" height="270" src="https://www.youtube.com/embed/7ipydm8guz4?feature=oembed" frameborder="0" allowfullscreen=""></iframe>');
-    $this->assertRaw('</not-drupal-url>');
+    $this->assertRaw('</not-drupal-url>');*/
   }
 
 }
