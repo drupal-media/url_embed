@@ -46,9 +46,14 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     $format = entity_create('filter_format', array(
       'format' => 'custom_format',
       'name' => 'Custom format',
+      'filters' => array(
+        'url_embed' => array(
+          'status' => 1,
+        ),
+      ),
     ));
     $format->save();
-    
+
     // Create a user with required permissions.
     $this->webUser = $this->drupalCreateUser(array(
       'access content',
@@ -58,6 +63,6 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     $this->drupalLogin($this->webUser);
 
     // Create a sample url to be embedded.
-    $this->sample_url = 'https://youtu.be/7ipydm8guz4';
+    $this->sample_url = 'http://www.flickr.com/photos/bees/2341623661/';
   }
 }
