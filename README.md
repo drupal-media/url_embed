@@ -1,5 +1,4 @@
-# url_embed
-URL Embed Module For Drupal 8
+# URL Embed [![Build Status](https://travis-ci.org/drupal-media/url_embed.svg?branch=8.x-1.x)](https://travis-ci.org/drupal-media/url_embed)
 
 Project Description: This module should be the defacto way to embed an URL using WYSIWYG or a link field. This module will deprecate the ['oembed' module for Drupal 7] (https://www.drupal.org/project/oembed). This module will use the API provided by the 'Embed' module, which is also incidentally another GSoC project for this year but that should not obstruct the its development, at least in the initial stages.
 
