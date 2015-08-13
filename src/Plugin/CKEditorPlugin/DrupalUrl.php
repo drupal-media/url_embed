@@ -98,7 +98,7 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
    */
   public function getLibraries(Editor $editor) {
     return array(
-      'core/drupal.ajax',
+      'embed/embed',
     );
   }
 

@@ -109,7 +109,7 @@
           var urlEmbedPreview = new Drupal.ajax({
             base: $element.attr('id'),
             element: $element,
-            url: Drupal.url('url-embed/preview/' + editor.config.drupal.format + '?' + $.param({
+            url: Drupal.url('embed/preview/' + editor.config.drupal.format + '?' + $.param({
               value: element.getOuterHtml()
             })),
             progress: {type: 'none'},
@@ -209,20 +209,5 @@
     }
     return 'url-embed-' + generateEmbedId.counter++;
   }
-
-
-  /**
-   * Ajax 'url_embed_insert' command: insert the rendered URL.
-   *
-   * The regular Drupal.ajax.commands.insert() command cannot target elements
-   * within iframes. This is a skimmed down equivalent that works whether the
-   * CKEditor is in iframe or divarea mode.
-   */
-  Drupal.AjaxCommands.prototype.url_embed_insert = function(ajax, response, status) {
-    var $target = ajax.element;
-    // No need to detach behaviors here, the widget is created fresh each time.
-    $target.html(response.html);
-  };
-
 
 })(jQuery, Drupal, CKEDITOR);
