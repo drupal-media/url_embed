@@ -28,14 +28,6 @@ class UrlButtonForm extends EntityForm {
   protected $entityManager;
 
   /**
-   * The entity query factory service.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
-
-
-  /**
    * The CKEditor plugin manager.
    *
    * @var \Drupal\ckeditor\CKEditorPluginManager
@@ -52,15 +44,12 @@ class UrlButtonForm extends EntityForm {
   /**
    * Constructs a new UrlButtonForm.
    *
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entity_query
-   *   The entity query.
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    */
-  public function __construct(QueryFactory $entity_query, EntityManagerInterface $entity_manager, ConfigFactoryInterface $config_factory) {
-    $this->entityQuery = $entity_query;
+  public function __construct(EntityManagerInterface $entity_manager, ConfigFactoryInterface $config_factory) {
     $this->entityManager = $entity_manager;
     $this->urlEmbedConfig = $config_factory->get('url_embed.settings');
   }
@@ -70,7 +59,6 @@ class UrlButtonForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.query'),
       $container->get('entity.manager'),
       $container->get('config.factory')
     );
@@ -107,7 +95,8 @@ class UrlButtonForm extends EntityForm {
       '#type' => 'machine_name',
       '#default_value' => $url_button->id(),
       '#machine_name' => array(
-        'exists' => array($this, 'exists'),
+        'exists' => ['Drupal\url_embed\Entity\UrlButton', 'load'],
+        'source' => array('label'),
       ),
       '#disabled' => !$url_button->isNew(),
     );
@@ -191,23 +180,6 @@ class UrlButtonForm extends EntityForm {
 
     // Set the UUID of the button icon.
     $entity->set('button_icon_uuid', $button_icon_uuid);
-  }
-
-
-  /**
-   * Determines if the button already exists.
-   *
-   * @param string $button_id
-   *   The button ID.
-   *
-   * @return bool
-   *   TRUE if the button exists, FALSE otherwise.
-   */
-  public function exists($button_id) {
-    $entity = $this->entityQuery->get('url_button')
-      ->condition('id', $button_id)
-      ->execute();
-    return (bool) $entity;
   }
 
 }
