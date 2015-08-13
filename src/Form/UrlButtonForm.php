@@ -155,7 +155,7 @@ class UrlButtonForm extends EntityForm {
       drupal_set_message($this->t('Saved the %label URL Button.', array(
         '%label' => $url_button->label(),
       )));
-      $form_state->setRedirect('url_button.list');
+      $form_state->setRedirect('url_embed_button.list');
     }
     else {
       drupal_set_message($this->t('The %label URL Button was not saved.', array(

@@ -14,8 +14,8 @@ use Drupal\url_embed\UrlButtonInterface;
  * Defines the UrlButton entity.
  *
  * @ConfigEntityType(
- *   id = "url_button",
- *   label = @Translation("Url Button"),
+ *   id = "url_embed_button",
+ *   label = @Translation("Url embed button"),
  *   handlers = {
  *     "list_builder" = "Drupal\url_embed\UrlButtonListBuilder",
  *     "form" = {
@@ -36,8 +36,8 @@ use Drupal\url_embed\UrlButtonInterface;
  *     "button_icon_uuid",
  *   },
  *   links = {
- *     "edit-form" = "/admin/config/content/url-button/{url_button}",
- *     "delete-form" = "/admin/config/content/url-button/{url_button}/delete"
+ *     "edit-form" = "/admin/config/content/url-button/{url_embed_button}",
+ *     "delete-form" = "/admin/config/content/url-button/{url_embed_button}/delete"
  *   }
  * )
  */

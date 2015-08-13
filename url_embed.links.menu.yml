@@ -1,5 +1,5 @@
-url_button.list:
-  title: 'URL Buttons'
+url_embed_button.list:
+  title: 'URL embed buttons'
   parent: system.admin_config_content
-  description: 'Configure which buttons are available in the CKEditor configuration toolbar.'
-  route_name: url_button.list
+  description: 'Configure which URL embed buttons are available in the CKEditor configuration toolbar.'
+  route_name: url_embed_button.list

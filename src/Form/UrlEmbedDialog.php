@@ -76,10 +76,11 @@ class UrlEmbedDialog extends FormBase {
    *
    * @param \Drupal\filter\Entity\FilterFormatInterface $filter_format
    *   The filter format to which this dialog corresponds.
-   * @param \Drupal\url_embed\Entity\UrlButtonInterface $url_button
+   * @param \Drupal\url_embed\Entity\UrlButtonInterface $url_embed_button
    *   The URL button to which this dialog corresponds.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, FilterFormatInterface $filter_format = NULL, UrlButtonInterface $url_button = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, FilterFormatInterface $filter_format = NULL, UrlButtonInterface $url_embed_button = NULL) {
+    $url_button = $url_embed_button;
     $values = $form_state->getValues();
     $input = $form_state->getUserInput();
     // Set URL button element in form state, so that it can be used later in
@@ -155,20 +156,21 @@ class UrlEmbedDialog extends FormBase {
   }
 
   /**
-   * Checks whether or not the URL button is enabled for given text format.
+   * Checks whether or not the embed button is enabled for given text format.
    *
-   * Returns allowed if the editor toolbar contains the URL button and neutral
+   * Returns allowed if the editor toolbar contains the embed button and neutral
    * otherwise.
    *
-   * @param \Drupal\filter\Entity\FilterFormatInterface $filter_format
+   * @param \Drupal\filter\FilterFormatInterface $filter_format
    *   The filter format to which this dialog corresponds.
-   * @param \Drupal\url_embed\Entity\UrlButtonInterface $url_button
-   *   The URL button to which this dialog corresponds.
+   * @param \Drupal\url_embed\UrlButtonInterface $url_embed_button
+   *   The embed button to which this dialog corresponds.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function buttonIsEnabled(FilterFormatInterface $filter_format, UrlButtonInterface $url_button) {
+  public function buttonIsEnabled(FilterFormatInterface $filter_format, UrlButtonInterface $url_embed_button) {
+    $url_button = $url_embed_button;
     $button_id = $url_button->id();
     $editor = Editor::load($filter_format->id());
     $settings = $editor->getSettings();

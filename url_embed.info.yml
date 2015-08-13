@@ -4,6 +4,7 @@ description: 'Allows URLs to be embedded in CKEditor'
 core: 8.x
 package: Filters
 dependencies:
+  - composer_manager
   - editor
   - filter
-  - composer_manager
+configure: url_embed_button.list

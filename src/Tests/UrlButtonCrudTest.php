@@ -35,7 +35,7 @@ class UrlButtonCrudTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->controller = $this->container->get('entity.manager')->getStorage('url_button');
+    $this->controller = $this->container->get('entity.manager')->getStorage('url_embed_button');
   }
 
   /**

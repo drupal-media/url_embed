@@ -63,7 +63,7 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity.query')->get('url_button')
+      $container->get('entity.query')->get('url_embed_button')
       );
     }
 
