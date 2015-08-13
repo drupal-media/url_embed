@@ -1,3 +1,20 @@
+url_embed.dialog:
+  path: '/url-embed/dialog/url-embed/{filter_format}/{url_button}'
+  defaults:
+    _form: '\Drupal\url_embed\Form\UrlEmbedDialog'
+    _title: 'Embed URL'
+  requirements:
+    _entity_access: 'filter_format.use'
+    _custom_access: '\Drupal\url_embed\Form\UrlEmbedDialog::buttonIsEnabled'
+
+url_embed.preview:
+  path: '/url-embed/preview/{filter_format}'
+  defaults:
+    _controller: '\Drupal\url_embed\UrlEmbedController::preview'
+    _title: 'Preview embedded url'
+  requirements:
+    _entity_access: 'filter_format.use'
+
 url_button.list:
   path: '/admin/config/content/url-button'
   defaults:
