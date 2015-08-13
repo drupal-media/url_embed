@@ -52,7 +52,6 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->urlButtons = $url_button_query->execute();
-    debug($this->urlButtons);
   }
 
   /**
