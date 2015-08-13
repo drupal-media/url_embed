@@ -1,5 +1,5 @@
 url_embed.dialog:
-  path: '/url-embed/dialog/url-embed/{filter_format}/{url_embed_button}'
+  path: '/url-embed/dialog/{filter_format}/{url_embed_button}'
   defaults:
     _form: '\Drupal\url_embed\Form\UrlEmbedDialog'
     _title: 'Embed URL'

@@ -8,7 +8,10 @@
 namespace Drupal\url_embed\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\editor\EditorInterface;
 use Drupal\url_embed\UrlButtonInterface;
+use Drupal\file\FileUsage\FileUsageInterface;
 
 /**
  * Defines the UrlButton entity.
@@ -88,6 +91,93 @@ class UrlButton extends ConfigEntityBase implements UrlButtonInterface {
     }
 
     return $this->dependencies;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isEnabledInEditor(EditorInterface $editor) {
+    if ($id = $this->id()) {
+      $settings = $editor->getSettings();
+      foreach ($settings['toolbar']['rows'] as $row_number => $row) {
+        foreach ($row as $group) {
+          if (in_array($id, $group['items'])) {
+            return TRUE;
+          }
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+
+    $new_button_icon_uuid = $this->get('button_icon_uuid');
+    if (isset($this->original)) {
+      $old_button_icon_uuid = $this->original->get('button_icon_uuid');
+
+      if (!empty($old_button_icon_uuid) && $old_button_icon_uuid != $new_button_icon_uuid) {
+        if ($file = $this->entityManager()->loadEntityByUuid('file', $old_button_icon_uuid)) {
+          $this->fileUsage()->delete($file, 'entity_embed', $this->getEntityTypeId(), $this->id());
+        }
+      }
+    }
+
+    if ($new_button_icon_uuid) {
+      if ($file = $this->entityManager()->loadEntityByUuid('file', $new_button_icon_uuid)) {
+        $usage = $this->fileUsage()->listUsage($file);
+        if (empty($usage['entity_embed'][$this->getEntityTypeId()][$this->id()])) {
+          $this->fileUsage()->add($file, 'entity_embed', $this->getEntityTypeId(), $this->id());
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function postDelete(EntityStorageInterface $storage, array $entities) {
+    parent::postDelete($storage, $entities);
+
+    foreach ($entities as $entity) {
+      $button_icon_uuid = $entity->get('button_icon_uuid');
+      if ($button_icon_uuid) {
+        if ($file = \Drupal::entityManager()->loadEntityByUuid('file', $button_icon_uuid)) {
+          \Drupal::service('file.usage')->delete($file, 'entity_embed', $entity->getEntityTypeId(), $entity->id());
+        }
+      }
+    }
+  }
+
+  /**
+   * Returns the file usage service.
+   *
+   * @return \Drupal\file\FileUsage\FileUsageInterface
+   *   The file usage service.
+   */
+  protected function fileUsage() {
+    if (!isset($this->fileUsage)) {
+      $this->fileUsage = \Drupal::service('file.usage');
+    }
+    return $this->fileUsage;
+  }
+
+  /**
+   * Sets the file usage service.
+   *
+   * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
+   *   The file usage service.
+   *
+   * @return self
+   */
+  public function setFileUsage(FileUsageInterface $file_usage) {
+    $this->fileUsage = $file_usage;
+    return $this;
   }
 
 }
