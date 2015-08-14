@@ -7,8 +7,8 @@
 
 namespace Drupal\url_embed\Plugin\Filter;
 
-use Drupal\Core\Annotation\Translation;
 use Drupal\Component\Utility\Html;
+use Drupal\embed\DomHelperTrait;
 use Drupal\filter\Annotation\Filtere;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
@@ -25,49 +25,7 @@ use Embed\Embed;
  * )
  */
 class UrlEmbedFilter extends FilterBase {
-
-  /**
-   * Replace the contents of a DOMNode.
-   *
-   * @param \DOMNode $node
-   *   A DOMNode or DOMElement object.
-   * @param string $content
-   *   The text or HTML that will replace the contents of $node.
-   */
-  protected function setDomNodeContent(\DOMNode $node, $content) {
-
-    // Load the contents into a new DOMDocument and retrieve the element.
-    $replacement_node = Html::load($content)->getElementsByTagName('body')
-      ->item(0)
-      ->childNodes
-      ->item(0);
-
-    // Import the updated DOMNode from the new DOMDocument into the original
-    // one, importing also the child nodes of the replacment DOMNode.
-    $replacement_node = $node->ownerDocument->importNode($replacement_node, TRUE);
-
-    // Remove all children of the DOMNode.
-    while ($node->hasChildNodes()) {
-      $node->removeChild($node->firstChild);
-    }
-    // Rename tag of container elemet to 'div' if it was 'drupal-url'.
-    if ($node->tagName == 'drupal-url') {
-      $new_node = $node->ownerDocument->createElement('div');
-
-      // Copy all attributes of original node to new node.
-      if ($node->attributes->length) {
-        foreach ($node->attributes as $attribute) {
-          $new_node->setAttribute($attribute->nodeName, $attribute->nodeValue);
-        }
-      }
-
-      $node->parentNode->replaceChild($new_node, $node);
-
-      $node = $new_node;
-    }
-
-    $node->appendChild($replacement_node);
-  }
+  use DomHelperTrait;
 
   /**
    * {@inheritdoc}
@@ -79,16 +37,27 @@ class UrlEmbedFilter extends FilterBase {
       $xpath = new \DOMXPath($dom);
 
       foreach ($xpath->query('//*[@data-embed-url]') as $node) {
+        /** @var \DOMElement $node */
         $url = $node->getAttribute('data-embed-url');
+        $url_output = '';
         try {
-          $info = Embed::create($url);
-          $this->setDomNodeContent($node, $info->code);
-          $result->setProcessedText(Html::serialize($dom));
+          if ($info = Embed::create($url)) {
+            $url_output = $info->getCode();
+            $node->setAttribute('data-url-provider', $info->getProviderName());
+          }
         }
         catch(\Exception $e){
           watchdog_exception('url_embed', $e);
         }
+
+        // Ensure this element is using <div> now if it was <drupal-url>.
+        if ($node->tagName == 'drupal-url') {
+          $this->changeNodeName($node, 'div');
+        }
+        $this->setNodeContent($node, $url_output);
       }
+
+      $result->setProcessedText(Html::serialize($dom));
     }
     return $result;
   }

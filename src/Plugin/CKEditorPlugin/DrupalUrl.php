@@ -52,7 +52,6 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->urlButtons = $url_button_query->execute();
-    debug($this->urlButtons);
   }
 
   /**
@@ -63,7 +62,7 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity.query')->get('url_button')
+      $container->get('entity.query')->get('url_embed_button')
       );
     }
 
@@ -98,7 +97,7 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
    */
   public function getLibraries(Editor $editor) {
     return array(
-      'core/drupal.ajax',
+      'embed/embed',
     );
   }
 

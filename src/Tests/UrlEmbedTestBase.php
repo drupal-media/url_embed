@@ -7,6 +7,8 @@
 
 namespace Drupal\url_embed\Tests;
 
+use Drupal\editor\Entity\Editor;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -19,7 +21,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('url_embed', 'node');
+  public static $modules = array('url_embed', 'node', 'ckeditor');
 
   /**
    * The test user.
@@ -42,17 +44,35 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     // Create a page content type.
     $this->drupalCreateContentType(array('type' => 'page', 'name' => 'Basic page'));
 
-    // Create Filtered HTML text format and enable url_embed filter.
-    $format = entity_create('filter_format', array(
+
+    // Create a text format and enable the url_embed filter.
+    $format = FilterFormat::create([
       'format' => 'custom_format',
       'name' => 'Custom format',
-      'filters' => array(
-        'url_embed' => array(
+      'filters' => [
+        'url_embed' => [
           'status' => 1,
-        ),
-      ),
-    ));
+        ],
+      ],
+    ]);
     $format->save();
+
+    $editor_group = [
+      'name' => 'URL Embed',
+      'items' => [
+        'url',
+      ],
+    ];
+    $editor = Editor::create([
+      'format' => 'custom_format',
+      'editor' => 'ckeditor',
+      'settings' => [
+        'toolbar' => [
+          'rows' => [[$editor_group]],
+        ],
+      ],
+    ]);
+    $editor->save();
 
     // Create a user with required permissions.
     $this->webUser = $this->drupalCreateUser(array(

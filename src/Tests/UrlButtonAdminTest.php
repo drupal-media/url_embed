@@ -38,7 +38,7 @@ class UrlButtonAdminTest extends UrlEmbedTestBase {
       'access content',
       'create page content',
       'use text format custom_format',
-      'administer url buttons',
+      'administer url embed buttons',
     ));
   }
 

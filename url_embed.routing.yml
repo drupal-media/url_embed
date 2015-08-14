@@ -1,5 +1,5 @@
 url_embed.dialog:
-  path: '/url-embed/dialog/url-embed/{filter_format}/{url_button}'
+  path: '/url-embed/dialog/{filter_format}/{url_embed_button}'
   defaults:
     _form: '\Drupal\url_embed\Form\UrlEmbedDialog'
     _title: 'Embed URL'
@@ -7,42 +7,34 @@ url_embed.dialog:
     _entity_access: 'filter_format.use'
     _custom_access: '\Drupal\url_embed\Form\UrlEmbedDialog::buttonIsEnabled'
 
-url_embed.preview:
-  path: '/url-embed/preview/{filter_format}'
-  defaults:
-    _controller: '\Drupal\url_embed\UrlEmbedController::preview'
-    _title: 'Preview embedded url'
-  requirements:
-    _entity_access: 'filter_format.use'
-
-url_button.list:
+url_embed_button.list:
   path: '/admin/config/content/url-button'
   defaults:
-    _entity_list: 'url_button'
-    _title: 'URL Buttons'
+    _entity_list: 'url_embed_button'
+    _title: 'URL embed buttons'
   requirements:
-    _permission: 'administer url buttons'
+    _permission: 'administer url embed buttons'
 
-url_button.add:
+url_embed_button.add:
   path: '/admin/config/content/url-button/add'
   defaults:
-    _entity_form: 'url_button.add'
-    _title: 'Add URL Button'
+    _entity_form: 'url_embed_button.add'
+    _title: 'Add URL embed button'
   requirements:
-    _permission: 'administer url buttons'
+    _permission: 'administer url embed buttons'
 
-entity.url_button.edit_form:
-  path: '/admin/config/content/url-button/{url_button}'
+entity.url_embed_button.edit_form:
+  path: '/admin/config/content/url-button/{url_embed_button}'
   defaults:
-    _entity_form: 'url_button.edit'
-    _title: 'Edit URL button'
+    _entity_form: 'url_embed_button.edit'
+    _title: 'Edit URL embed button'
   requirements:
-    _permission: 'administer url buttons'
+    _permission: 'administer url embed buttons'
 
-entity.url_button.delete_form:
-  path: '/admin/config/content/url-button/{url_button}/delete'
+entity.url_embed_button.delete_form:
+  path: '/admin/config/content/url-button/{url_embed_button}/delete'
   defaults:
-    _entity_form: 'url_button.delete'
-    _title: 'Delete URL button'
+    _entity_form: 'url_embed_button.delete'
+    _title: 'Delete URL embed button'
   requirements:
-    _permission: 'administer url buttons'
+    _permission: 'administer url embed buttons'
