@@ -1,6 +1,6 @@
 /**
  * @file
- * Drupal Entity plugin.
+ * Drupal URL embed plugin.
  */
 
 (function ($, Drupal, CKEDITOR) {
@@ -34,15 +34,15 @@
         exec: function (editor, data) {
           data = data || {};
 
-          var existingElement = getSelectedEntity(editor);
+          var existingElement = getSelectedEmbeddedUrl(editor);
 
           var existingValues = {};
           if (existingElement && existingElement.$ && existingElement.$.firstChild) {
-            var entityDOMElement = existingElement.$.firstChild;
-            // Populate array with the entity's current attributes.
+            var embedDOMElement = existingElement.$.firstChild;
+            // Populate array with the embed item's current attributes.
             var attribute = null, attributeName;
-            for (var key = 0; key < entityDOMElement.attributes.length; key++) {
-              attribute = entityDOMElement.attributes.item(key);
+            for (var key = 0; key < embedDOMElement.attributes.length; key++) {
+              attribute = embedDOMElement.attributes.item(key);
               attributeName = attribute.nodeName.toLowerCase();
               if (attributeName.substring(0, 15) === 'data-cke-saved-') {
                 continue;
@@ -68,7 +68,7 @@
             }
             editor.insertHtml(urlElement.getOuterHtml());
             if (existingElement) {
-              // Detach the behaviors that were attached when the entity content
+              // Detach the behaviors that were attached when the URL content
               // was inserted.
               runEmbedBehaviors('detach', existingElement.$);
               existingElement.remove();
@@ -76,7 +76,7 @@
           };
 
           // Open the URL embed dialog for corresponding EmbedButton.
-          Drupal.ckeditor.openDialog(editor, Drupal.url('url-embed/dialog/url-embed/' + editor.config.drupal.format + '/' + url_button_id), existingValues, saveCallback, dialogSettings);
+          Drupal.ckeditor.openDialog(editor, Drupal.url('url-embed/dialog/' + editor.config.drupal.format + '/' + url_button_id), existingValues, saveCallback, dialogSettings);
         }
       });
 
@@ -100,7 +100,7 @@
           return element;
         },
 
-        // Fetch the rendered entity.
+        // Fetch the rendered item.
         init: function () {
           var element = this.element;
           var $element = $(element.$);
@@ -155,7 +155,7 @@
         });
 
         editor.contextMenu.addListener(function(element) {
-          if (isUrlWidget(editor, element)) {
+          if (isEmbeddedUrlWidget(editor, element)) {
             return { drupalurl: CKEDITOR.TRISTATE_OFF };
           }
         });
@@ -163,9 +163,9 @@
 
       // Execute widget editing action on double click.
       editor.on('doubleclick', function (evt) {
-        var element = getSelectedEntity(editor) || evt.data.element;
+        var element = getSelectedEmbeddedUrl(editor) || evt.data.element;
 
-        if (isUrlWidget(editor, element)) {
+        if (isEmbeddedUrlWidget(editor, element)) {
           editor.execCommand('editdrupalurl');
         }
       });
@@ -177,10 +177,10 @@
    *
    * @param {CKEDITOR.editor} editor
    */
-  function getSelectedEntity(editor) {
+  function getSelectedEmbeddedUrl(editor) {
     var selection = editor.getSelection();
     var selectedElement = selection.getSelectedElement();
-    if (isUrlWidget(editor, selectedElement)) {
+    if (isEmbeddedUrlWidget(editor, selectedElement)) {
       return selectedElement;
     }
 
@@ -193,7 +193,7 @@
    * @param {CKEDITOR.editor} editor
    * @param {CKEDITOR.htmlParser.element} element
    */
-  function isUrlWidget (editor, element) {
+  function isEmbeddedUrlWidget (editor, element) {
     var widget = editor.widgets.getByElement(element, true);
     return widget && widget.name === 'drupalurl';
   }
