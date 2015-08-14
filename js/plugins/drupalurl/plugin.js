@@ -148,8 +148,7 @@
       if (editor.contextMenu) {
         editor.addMenuGroup('drupalurl');
         editor.addMenuItem('drupalurl', {
-          label: Drupal.t('Edit URL'),
-          icon: this.path + 'entity.png',
+          label: Drupal.t('Edit embedded URL'),
           command: 'editdrupalurl',
           group: 'drupalurl'
         });
