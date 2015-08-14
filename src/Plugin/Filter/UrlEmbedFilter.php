@@ -46,7 +46,7 @@ class UrlEmbedFilter extends FilterBase {
             $node->setAttribute('data-url-provider', $info->getProviderName());
           }
         }
-        catch(\Exception $e){
+        catch (\Exception $e) {
           watchdog_exception('url_embed', $e);
         }
 
