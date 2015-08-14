@@ -70,7 +70,7 @@
             if (existingElement) {
               // Detach the behaviors that were attached when the URL content
               // was inserted.
-              runEmbedBehaviors('detach', existingElement.$);
+              Drupal.runEmbedBehaviors('detach', existingElement.$);
               existingElement.remove();
             }
           };
