@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\entity_embed\Tests\EntityEmbedDialogTest.
+ * Contains \Drupal\url_embed\Tests\UrlEmbedDialogTest.
  */
 
 namespace Drupal\url_embed\Tests;

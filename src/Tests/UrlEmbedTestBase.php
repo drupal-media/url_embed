@@ -45,7 +45,7 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     $this->drupalCreateContentType(array('type' => 'page', 'name' => 'Basic page'));
 
 
-    // Create Filtered HTML text format and enable entity_embed filter.
+    // Create a text format and enable the url_embed filter.
     $format = FilterFormat::create([
       'format' => 'custom_format',
       'name' => 'Custom format',

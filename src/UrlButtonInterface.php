@@ -24,13 +24,13 @@ interface UrlButtonInterface extends ConfigEntityInterface {
   public function getButtonImage();
 
   /**
-   * Checks if the entity embed button is enabled in an editor configuration.
+   * Checks if the URL embed button is enabled in an editor configuration.
    *
    * @param \Drupal\editor\EditorInterface $editor
    *   The editor object to check.
    *
    * @return bool
-   *   TRUE if this entity embed button is enabled in $editor. FALSE otherwise.
+   *   TRUE if this URL embed button is enabled in $editor. FALSE otherwise.
    */
   public function isEnabledInEditor(EditorInterface $editor);
 
