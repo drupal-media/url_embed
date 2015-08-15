@@ -104,7 +104,6 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
     $elements = array();
 
     foreach ($items as $delta => $item) {
-      // By default use the full URL as the link text.
       $url = $this->buildUrl($item);
       $url_string = $url->toString();
       $info = Embed::create($url_string);
