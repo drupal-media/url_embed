@@ -22,11 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Embed\Embed;
 /**
- * Plugin implementation of the 'URL_Embed' formatter.
+ * Plugin implementation of the 'URL Embed' formatter.
  *
  * @FieldFormatter(
  *   id = "url_embed",
- *   label = @Translation("URL_Embed"),
+ *   label = @Translation("URL Embed"),
  *   field_types = {
  *     "link"
  *   }
@@ -93,7 +93,7 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
    */
   public function settingsSummary() {
     $summary = array();
-    $summary[] = t('Link URL Embeded using Embed Library');
+    $summary[] = t('Link embeded URL using Embed library');
     return $summary;
   }
 
@@ -101,21 +101,18 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items) {
-    $element = array();
-    $entity = $items->getEntity();
-    $settings = $this->getSettings();
+    $elements = array();
 
     foreach ($items as $delta => $item) {
       // By default use the full URL as the link text.
       $url = $this->buildUrl($item);
       $url_string = $url->toString();
       $info = Embed::create($url_string);
-      $url_embed_code = $info->code;
-      $element[$delta] = array(
-          '#markup' => SafeMarkup::checkPlain($url_embed_code),
+      $elements[$delta] = array(
+          '#markup' => SafeMarkup::set($info->code),
        );
 
-    return $element;
+    return $elements;
     }
   }
 
