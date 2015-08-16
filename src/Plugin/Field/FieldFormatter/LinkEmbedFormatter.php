@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\url_embed\Plugin\Field\FieldFormatter\UrlFormatter.
+ * Contains \Drupal\url_embed\Plugin\Field\FieldFormatter\LinkEmbedFormatter.
  */
 
 namespace Drupal\url_embed\Plugin\Field\FieldFormatter;
@@ -24,7 +24,7 @@ use Embed\Embed;
  *
  * @FieldFormatter(
  *   id = "url_embed",
- *   label = @Translation("URL Embed"),
+ *   label = @Translation("Preview URL using Embed library"),
  *   field_types = {
  *     "link"
  *   }
@@ -50,35 +50,17 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsSummary() {
-    $summary = array();
-    $summary[] = t('Link embeded URL using Embed library');
-    return $summary;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function viewElements(FieldItemListInterface $items) {
     $elements = array();
-
     foreach ($items as $delta => $item) {
       $url = $item->getUrl() ?: Url::fromRoute('<none>');
       $url_string = $url->toString();
       $info = Embed::create($url_string);
       $elements[$delta] = array(
-          '#markup' => SafeMarkup::set($info->code),
-       );
-
-    return $elements;
+        '#markup' => SafeMarkup::set($info->code),
+      );
     }
+    return $elements;
   }
-
 
 }
