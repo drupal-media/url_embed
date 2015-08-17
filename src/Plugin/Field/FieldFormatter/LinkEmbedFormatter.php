@@ -53,17 +53,18 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
   public function viewElements(FieldItemListInterface $items) {
     $elements = array();
     foreach ($items as $delta => $item) {
-      $url = $item->getUrl();
-      $url_string = $url->toString();
+     if( $url = $item->getUrl()->toString()){
       try {
-          $info = Embed::create($url_string);
+          $info = Embed::create($url);
+          $elements[$delta] = array(
+            '#markup' => SafeMarkup::set($info->code),
+          );
       }
       catch(\Exception $e){
-          watchdog_exception('url_embed', $e);
+       // Doing nohing since it should be possible to use a mix of Link field type formatters.
+       // refer https://www.drupal.org/project/fallback_formatter for more information.
       }
-      $elements[$delta] = array(
-        '#markup' => SafeMarkup::set($info->code),
-      );
+     }
     }
     return $elements;
   }
