@@ -53,9 +53,15 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
   public function viewElements(FieldItemListInterface $items) {
     $elements = array();
     foreach ($items as $delta => $item) {
-      $url = $item->getUrl() ?: Url::fromRoute('<none>');
+      $url = $item->getUrl();
       $url_string = $url->toString();
-      $info = Embed::create($url_string);
+      try {
+          $info = Embed::create($url_string);
+      }
+      catch(\Exception $e){
+          watchdog_exception('url_embed', $e);
+          return;
+      }
       $elements[$delta] = array(
         '#markup' => SafeMarkup::set($info->code),
       );
