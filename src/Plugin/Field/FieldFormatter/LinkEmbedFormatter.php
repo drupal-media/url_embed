@@ -60,7 +60,6 @@ class LinkEmbedFormatter extends FormatterBase implements ContainerFactoryPlugin
       }
       catch(\Exception $e){
           watchdog_exception('url_embed', $e);
-          return;
       }
       $elements[$delta] = array(
         '#markup' => SafeMarkup::set($info->code),
