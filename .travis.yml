@@ -108,7 +108,6 @@ install:
 before_script:
   - drupal-ti --include .drupal_ti/dependencies.sh
   - drupal-ti before_script
-  - drupal-ti --include .drupal_ti/composer-update.sh
 
 script:
   - drupal-ti script

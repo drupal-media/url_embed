@@ -6,9 +6,22 @@ set -e $DRUPAL_TI_DEBUG
 # Note: This function is re-entrant.
 drupal_ti_ensure_drupal
 
-cd "$DRUPAL_TI_DRUPAL_DIR"
-drush dl embed --yes
-drush pm-enable embed --yes
-drush dl composer_manager --yes
+# Download dependencies
+mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
+cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
+git clone --depth 1 --branch 8.x-1.x https://github.com/drupal-media/embed.git
+git clone --depth 1 --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git
+
+# Initialize composer manager
 drush pm-enable composer_manager --yes
-drush composer-manager-init
+cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH/composer_manager"
+php scripts/init.php
+
+# Ensure the module is linked into the code base and enabled.
+# Note: This function is re-entrant.
+drupal_ti_ensure_module
+
+# Update composer
+cd "$DRUPAL_TI_DRUPAL_DIR/core"
+composer drupal-rebuild
+composer update embed --prefer-source
