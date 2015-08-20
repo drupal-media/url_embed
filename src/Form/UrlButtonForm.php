@@ -35,13 +35,6 @@ class UrlButtonForm extends EntityForm {
   protected $ckeditorPluginManager;
 
   /**
-   * The url_embed settings config object.
-   *
-   * @var \Drupal\Core\Config\Config
-   */
-  protected $urlEmbedConfig;
-
-  /**
    * Constructs a new UrlButtonForm.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
@@ -51,7 +44,7 @@ class UrlButtonForm extends EntityForm {
    */
   public function __construct(EntityManagerInterface $entity_manager, ConfigFactoryInterface $config_factory) {
     $this->entityManager = $entity_manager;
-    $this->urlEmbedConfig = $config_factory->get('url_embed.settings');
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -79,8 +72,9 @@ class UrlButtonForm extends EntityForm {
       $button_icon = array($file->id());
     }
 
-    $file_scheme = $this->urlEmbedConfig->get('file_scheme');
-    $upload_directory = $this->urlEmbedConfig->get('upload_directory');
+    $config = $this->config('embed.settings');
+    $file_scheme = $config->get('file_scheme');
+    $upload_directory = $config->get('upload_directory');
     $upload_location = $file_scheme . '://' . $upload_directory . '/';
 
     $form['label'] = array(
