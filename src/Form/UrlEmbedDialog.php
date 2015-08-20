@@ -7,7 +7,6 @@
 
 namespace Drupal\url_embed\Form;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -15,10 +14,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\editor\Ajax\EditorDialogSave;
-use Drupal\editor\Entity\Editor;
-use Drupal\url_embed\UrlButtonInterface;
-use Drupal\filter\FilterFormatInterface;
-use Drupal\Component\Serialization\Json;
+use Drupal\editor\EditorInterface;
+use Drupal\embed\EmbedButtonInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -74,18 +71,18 @@ class UrlEmbedDialog extends FormBase {
   /**
    * {@inheritdoc}
    *
-   * @param \Drupal\filter\Entity\FilterFormatInterface $filter_format
-   *   The filter format to which this dialog corresponds.
-   * @param \Drupal\url_embed\Entity\UrlButtonInterface $url_embed_button
+   * @param \Drupal\editor\EditorInterface $editor
+   *   The editor to which this dialog corresponds.
+   * @param \Drupal\embed\EmbedButtonInterface $embed_button
    *   The URL button to which this dialog corresponds.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, FilterFormatInterface $filter_format = NULL, UrlButtonInterface $url_embed_button = NULL) {
-    $url_button = $url_embed_button;
+  public function buildForm(array $form, FormStateInterface $form_state, EditorInterface $editor = NULL, EmbedButtonInterface $embed_button = NULL) {
     $values = $form_state->getValues();
     $input = $form_state->getUserInput();
     // Set URL button element in form state, so that it can be used later in
     // validateForm() function.
-    $form_state->set('url_button', $url_button);
+    $form_state->set('embed_button', $embed_button);
+    $form_state->set('editor', $editor);
     // Initialize URL element with form attributes, if present.
     $url_element = empty($values['attributes']) ? array() : $values['attributes'];
     // The default values are set directly from \Drupal::request()->request,
@@ -123,9 +120,9 @@ class UrlEmbedDialog extends FormBase {
       ),
     );
 
-    $form['attributes']['data-url-button'] = array(
+    $form['attributes']['data-embed-button'] = array(
       '#type' => 'value',
-      '#value' => $url_button->id(),
+      '#value' => $embed_button->id(),
     );
 
     return $form;
@@ -153,30 +150,5 @@ class UrlEmbedDialog extends FormBase {
     }
 
     return $response;
-  }
-
-  /**
-   * Checks whether or not the embed button is enabled for given text format.
-   *
-   * Returns allowed if the editor toolbar contains the embed button and neutral
-   * otherwise.
-   *
-   * @param \Drupal\filter\FilterFormatInterface $filter_format
-   *   The filter format to which this dialog corresponds.
-   * @param \Drupal\url_embed\UrlButtonInterface $url_embed_button
-   *   The embed button to which this dialog corresponds.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result.
-   */
-  public function buttonIsEnabled(FilterFormatInterface $filter_format, UrlButtonInterface $url_embed_button) {
-    /** @var \Drupal\editor\EditorInterface $editor */
-    if ($editor = Editor::load($filter_format->id())) {
-      if ($url_embed_button->isEnabledInEditor($editor)) {
-        return AccessResult::allowed();
-      }
-    }
-
-    return AccessResult::neutral();
   }
 }

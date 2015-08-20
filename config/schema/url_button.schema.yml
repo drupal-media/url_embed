@@ -1,15 +1,5 @@
 # Schema for the configuration files of the URL Embed module.
 
-url_embed.url_button.*:
-  type: config_entity
-  label: 'URL button config'
-  mapping:
-    label:
-      type: label
-      label: 'Name'
-    id:
-      type: string
-      label: 'Machine name'
-    button_icon_uuid:
-      type: string
-      label: 'Button image'
+embed.embed_type_settings.url:
+  type: mapping
+  label: 'Schema for the URL embed type additions to an embed button entity'

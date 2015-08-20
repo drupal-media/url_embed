@@ -12,7 +12,7 @@ use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\editor\Entity\Editor;
-use Drupal\url_embed\Entity\UrlButton;
+use Drupal\embed\Entity\EmbedButton;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,17 +27,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInterface {
 
   /**
-   * All URL button configuration entities.
+   * The embed button query.
    *
-   * An associative array that stores the description of all URL button
-   * configuration entities keyed by the button id.
-   *
-   * @var array
+   * @var \Drupal\Core\Entity\Query\QueryInterface
    */
-  protected $urlButtons;
+  protected $embedButtonQuery;
 
   /**
-   * Constructs a Drupal\url_embed\Plugin\CKEditorPlugin\DrupalUrl object.
+   * Constructs a Drupal\entity_embed\Plugin\CKEditorPlugin\DrupalEntity object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -45,13 +42,13 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\Query\QueryInterface $url_button_query
-   *   The entity query object for URL button.
+   * @param \Drupal\Core\Entity\Query\QueryInterface $embed_button_query
+   *   The entity query object for embed button.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, QueryInterface $url_button_query) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, QueryInterface $embed_button_query) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->urlButtons = $url_button_query->execute();
+    $this->embedButtonQuery = $embed_button_query;
+    $this->embedButtonQuery->condition('type_id', 'url');
   }
 
   /**
@@ -62,9 +59,9 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity.query')->get('url_embed_button')
-      );
-    }
+      $container->get('entity.query')->get('embed_button')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -72,14 +69,16 @@ class DrupalUrl extends CKEditorPluginBase implements ContainerFactoryPluginInte
   public function getButtons() {
     $buttons = array();
 
-    foreach ($this->urlButtons as $url_button) {
-      $button = UrlButton::load($url_button);
-      $buttons[$button->id()] = array(
-        'id' => SafeMarkup::checkPlain($button->id()),
-        'name' => SafeMarkup::checkPlain($button->label()),
-        'label' => SafeMarkup::checkPlain($button->label()),
-        'image' => $button->getButtonImage(),
-      );
+    if ($ids = $this->embedButtonQuery->execute()) {
+      $embed_buttons = EmbedButton::loadMultiple($ids);
+      foreach ($embed_buttons as $button) {
+        $buttons[$button->id()] = array(
+          'id' => $button->id(),
+          'name' => SafeMarkup::checkPlain($button->label()),
+          'label' => SafeMarkup::checkPlain($button->label()),
+          'image' => $button->getIconUrl(),
+        );
+      }
     }
 
     return $buttons;
