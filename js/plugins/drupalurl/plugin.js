@@ -51,7 +51,7 @@
             }
           }
 
-          var url_button_id = data.id ? data.id : existingValues['url-embed-button'];
+          var embed_button_id = data.id ? data.id : existingValues['data-embed-button'];
 
           var dialogSettings = {
             title: existingElement ? 'Edit URL' : 'Insert URL',
@@ -76,7 +76,7 @@
           };
 
           // Open the URL embed dialog for corresponding EmbedButton.
-          Drupal.ckeditor.openDialog(editor, Drupal.url('url-embed/dialog/' + editor.config.drupal.format + '/' + url_button_id), existingValues, saveCallback, dialogSettings);
+          Drupal.ckeditor.openDialog(editor, Drupal.url('url-embed/dialog/' + editor.config.drupal.format + '/' + embed_button_id), existingValues, saveCallback, dialogSettings);
         }
       });
 
