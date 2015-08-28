@@ -85,4 +85,9 @@ abstract class UrlEmbedTestBase extends WebTestBase {
     // Create a sample url to be embedded.
     $this->sample_url = 'http://www.flickr.com/photos/bees/2341623661/';
   }
+  
+  public function getSampleUrl()
+    {
+        return $this->sample_url;
+    }
 }
