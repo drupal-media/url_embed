@@ -67,7 +67,7 @@ class LinkEmbedFormatterTest extends LinkFieldTest{
     $this->drupalGet('entity_test/add');
     $url = UrlEmbedTestBase::getSampleUrl();
     $edit = array(
-      "{$field_name}[0][uri]" => $url1,
+      "{$field_name}[0][uri]" => $url,
     );
     $this->drupalPostForm(NULL, $edit, t('Save'));
     preg_match('|entity_test/manage/(\d+)|', $this->url, $match);
