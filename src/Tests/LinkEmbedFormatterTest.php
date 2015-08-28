@@ -17,7 +17,7 @@ use Drupal\url_embed\Tests\UrlEmbedTestBase;
 /**
  * Tests link field widgets and formatters.
  *
- * @group link
+ * @group url_embed
  */
 class LinkEmbedFormatterTest extends LinkFieldTest{
 
