@@ -31,9 +31,14 @@ abstract class UrlEmbedTestBase extends WebTestBase {
   protected $webUser;
 
   /**
-   * A test url to be used for embedding.
+   * The test Flickr URL.
    */
-  protected $sample_url;
+  const FLICKR_URL = 'http://www.flickr.com/photos/bees/2341623661/';
+
+  /**
+   * The expected output of the Flickr URL.
+   */
+  const FLICKR_OUTPUT = '<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by ‮‭‬bees‬, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a><script async="" src="https://embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>';
 
   /**
    * A set up for all tests.
@@ -81,8 +86,6 @@ abstract class UrlEmbedTestBase extends WebTestBase {
       'use text format custom_format',
     ));
     $this->drupalLogin($this->webUser);
-
-    // Create a sample url to be embedded.
-    $this->sample_url = 'http://www.flickr.com/photos/bees/2341623661/';
   }
+
 }
