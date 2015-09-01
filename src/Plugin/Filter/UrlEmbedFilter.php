@@ -8,11 +8,13 @@
 namespace Drupal\url_embed\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\embed\DomHelperTrait;
-use Drupal\filter\Annotation\Filtere;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
-use Embed\Embed;
+use Drupal\url_embed\UrlEmbedHelperTrait;
+use Drupal\url_embed\UrlEmbedInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a filter to display embedded URLs based on data attributes.
@@ -24,8 +26,38 @@ use Embed\Embed;
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE
  * )
  */
-class UrlEmbedFilter extends FilterBase {
+class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterface {
   use DomHelperTrait;
+  use UrlEmbedHelperTrait;
+
+  /**
+   * Constructs a UrlEmbedFilter object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\url_embed\UrlEmbedInterface $url_embed
+   *   The URL embed service.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, UrlEmbedInterface $url_embed) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->setUrlEmbed($url_embed);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('url_embed')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -41,7 +73,7 @@ class UrlEmbedFilter extends FilterBase {
         $url = $node->getAttribute('data-embed-url');
         $url_output = '';
         try {
-          if ($info = Embed::create($url)) {
+          if ($info = $this->urlEmbed()->getEmbed($url)) {
             $url_output = $info->getCode();
             $node->setAttribute('data-url-provider', $info->getProviderName());
           }
