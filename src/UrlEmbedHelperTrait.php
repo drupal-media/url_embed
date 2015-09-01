@@ -62,7 +62,7 @@ trait UrlEmbedHelperTrait {
   /**
    * Returns the URL embed service.
    *
-   * @return \Drupal\url_embed\UrlEmbedService
+   * @return \Drupal\url_embed\UrlEmbedInterface
    *   The URL embed service..
    */
   protected function urlEmbed() {
@@ -75,12 +75,12 @@ trait UrlEmbedHelperTrait {
   /**
    * Sets the URL embed service.
    *
-   * @param \Drupal\url_embed\UrlEmbedService $url_embed
+   * @param \Drupal\url_embed\UrlEmbedInterface $url_embed
    *   The URL embed service.
    *
    * @return self
    */
-  public function setUrlEmbed(UrlEmbedService $url_embed) {
+  public function setUrlEmbed(UrlEmbedInterface $url_embed) {
     $this->url_embed = $url_embed;
     return $this;
   }

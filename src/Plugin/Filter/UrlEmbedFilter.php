@@ -13,7 +13,7 @@ use Drupal\embed\DomHelperTrait;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Drupal\url_embed\UrlEmbedHelperTrait;
-use Drupal\url_embed\UrlEmbedService;
+use Drupal\url_embed\UrlEmbedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,10 +39,10 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\url_embed\UrlEmbedService $url_embed
+   * @param \Drupal\url_embed\UrlEmbedInterface $url_embed
    *   The URL embed service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, UrlEmbedService $url_embed) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, UrlEmbedInterface $url_embed) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->setUrlEmbed($url_embed);
   }

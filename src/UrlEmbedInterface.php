@@ -2,31 +2,23 @@
 
 /**
  * @file
- * Contains Drupal\url_embed\UrlEmbedService.
+ * Contains Drupal\url_embed\UrlEmbedInterface.
  */
 
 namespace Drupal\url_embed;
 
-use Embed\Embed;
-
 /**
  * A service class for handling URL embeds.
+ *
+ * @todo Add more documentation.
  */
-class UrlEmbedService {
+interface UrlEmbedInterface {
 
-  public $config;
+  public function __construct(array $config = []);
 
-  public function __construct(array $config = []) {
-    $this->config = $config;
-  }
+  public function getConfig();
 
-  public function getConfig() {
-    return $this->config;
-  }
-
-  public function setConfig(array $config) {
-    $this->config = $config;
-  }
+  public function setConfig(array $config);
 
   /**
    * @param string|\Embed\Request $request
@@ -42,8 +34,6 @@ class UrlEmbedService {
    *
    * @return \Embed\Adapters\AdapterInterface
    */
-  public function getEmbed($request, array $config = []) {
-    return Embed::create($request, $config ?: $this->config);
-  }
+  public function getEmbed($request, array $config = []);
 
 }
