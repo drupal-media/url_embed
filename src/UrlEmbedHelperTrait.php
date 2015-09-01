@@ -10,7 +10,7 @@ namespace Drupal\url_embed;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Wrapper methods for URL embedding..
+ * Wrapper methods for URL embedding.
  *
  * This utility trait should only be used in application-level code, such as
  * classes that would implement ContainerInjectionInterface. Services registered
