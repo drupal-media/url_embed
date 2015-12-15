@@ -68,7 +68,7 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
       $dom = Html::load($text);
       $xpath = new \DOMXPath($dom);
 
-      foreach ($xpath->query('//*[@data-embed-url]') as $node) {
+      foreach ($xpath->query('//drupal-url[@data-embed-url]') as $node) {
         /** @var \DOMElement $node */
         $url = $node->getAttribute('data-embed-url');
         $url_output = '';
@@ -82,10 +82,6 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
           watchdog_exception('url_embed', $e);
         }
 
-        // Ensure this element is using <div> now if it was <drupal-url>.
-        if ($node->tagName == 'drupal-url') {
-          $this->changeNodeName($node, 'div');
-        }
         $this->setNodeContent($node, $url_output);
       }
 
@@ -98,7 +94,16 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function tips($long = FALSE) {
-    // @todo Add filter tips.
+    if ($long) {
+      return $this->t('
+        <p>You can embed URLs. Additional properties can be added to the URL tag like data-caption and data-align if supported. Examples:</p>
+        <ul>
+          <li><code>&lt;drupal-url data-embed-url="https://www.youtube.com/watch?v=xxXXxxXxxxX" data-url-provider="YouTube" /&gt;</code></li>
+        </ul>');
+    }
+    else {
+      return $this->t('You can embed URLs.');
+    }
   }
 
 }
