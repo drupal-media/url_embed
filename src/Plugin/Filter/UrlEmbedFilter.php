@@ -75,7 +75,6 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
         try {
           if ($info = $this->urlEmbed()->getEmbed($url)) {
             $url_output = $info->getCode();
-            $node->setAttribute('data-url-provider', $info->getProviderName());
           }
         }
         catch (\Exception $e) {
