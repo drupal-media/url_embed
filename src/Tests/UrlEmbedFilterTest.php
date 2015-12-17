@@ -22,7 +22,7 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
    */
   public function testFilter() {
     // Tests url embed using sample flickr url.
-    $content = '<div data-embed-url="' . static::FLICKR_URL . '">This placeholder should not be rendered.</div>';
+    $content = '<drupal-url data-embed-url="' . static::FLICKR_URL . '">This placeholder should not be rendered.</drupal-url>';
     $settings = array();
     $settings['type'] = 'page';
     $settings['title'] = 'Test url embed with sample flickr url';
@@ -30,29 +30,36 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
     $this->assertRaw(static::FLICKR_OUTPUT);
-    $this->assertNoRaw('This placeholder should not be rendered.', 'Placeholder does not appears in the output when embed is successful.');
+    $this->assertNoText(strip_tags($content), 'Placeholder does not appear in the output when embed is successful.');
 
-    // Test that tag of container element is replaced when it's 'drupal-url'.
-    $content = '<drupal-url data-embed-url="' . static::FLICKR_URL . '">this placeholder should not be rendered.</drupal-url>';
+    // Ensure that placeholder is not replaced when embed is unsuccessful.
+    $content = '<drupal-url data-embed-url="">This placeholder should be rendered since specified URL does not exists.</drupal-url>';
     $settings = array();
     $settings['type'] = 'page';
-    $settings['title'] = 'Test url embed with sample flickr url';
+    $settings['title'] = 'Test that placeholder is retained when specified URL does not exists';
     $settings['body'] = array(array('value' => $content, 'format' => 'custom_format'));
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
-    $this->assertRaw(static::FLICKR_OUTPUT);
-    $this->assertNoRaw('</drupal-url>');
+    $this->assertNoText(strip_tags($content), 'Placeholder does not appear in the output when embed is unsuccessful.');
 
     // Test that tag of container element is not replaced when it's not
-    // 'drupal-url'.
+    // <drupal-url>.
     $content = '<not-drupal-url data-embed-url="' . static::FLICKR_URL . '">this placeholder should not be rendered.</not-drupal-url>';
     $settings = array();
     $settings['type'] = 'page';
-    $settings['title'] = 'Test url embed with sample flickr url';
+    $settings['title'] = 'test url embed with embed-url';
     $settings['body'] = array(array('value' => $content, 'format' => 'custom_format'));
     $node = $this->drupalCreateNode($settings);
-    $this->drupalGet('node/' . $node->id());
-    $this->assertRaw('<not-drupal-url data-embed-url="' . static::FLICKR_URL . '" data-url-provider="Flickr">' . static::FLICKR_OUTPUT . '</not-drupal-url>');
+    $this->drupalget('node/' . $node->id());
+    $this->assertRaw('</not-drupal-url>');
+    $content = '<div data-embed-url="' . static::FLICKR_URL . '">this placeholder should not be rendered.</div>';
+    $settings = array();
+    $settings['type'] = 'page';
+    $settings['title'] = 'test url embed with embed-url';
+    $settings['body'] = array(array('value' => $content, 'format' => 'custom_format'));
+    $node = $this->drupalCreateNode($settings);
+    $this->drupalget('node/' . $node->id());
+    $this->assertRaw('<div data-embed-url="' . static::FLICKR_URL . '"');
   }
 
 }
