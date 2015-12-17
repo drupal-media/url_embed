@@ -44,7 +44,7 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
 
     // Test that tag of container element is not replaced when it's not
     // <drupal-url>.
-    $content = '<not-drupal-url data-embed-url="' . static::FLICKR_URL . '">this placeholder should not be rendered.</not-drupal-url>';
+    $content = '<not-drupal-url data-embed-url="' . static::FLICKR_URL . '" data-url-provider="Flickr">this placeholder should not be rendered.</not-drupal-url>';
     $settings = array();
     $settings['type'] = 'page';
     $settings['title'] = 'test url embed with embed-url';

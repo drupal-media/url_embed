@@ -16,13 +16,15 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\editor\Ajax\EditorDialogSave;
 use Drupal\editor\EditorInterface;
 use Drupal\embed\EmbedButtonInterface;
-use Psr\Log\LoggerInterface;
+use Drupal\url_embed\UrlEmbedHelperTrait;
+use Drupal\url_embed\UrlEmbedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a form to embed URLs.
  */
 class UrlEmbedDialog extends FormBase {
+  use UrlEmbedHelperTrait;
 
   /**
    * The form builder.
@@ -32,23 +34,16 @@ class UrlEmbedDialog extends FormBase {
   protected $formBuilder;
 
   /**
-   * A logger instance.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
-
-  /**
    * Constructs a UrlEmbedDialog object.
    *
+   * @param \Drupal\url_embed\UrlEmbedInterface $url_embed
+   *   The URL embed service.
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The Form Builder.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
    */
-  public function __construct(FormBuilderInterface $form_builder, LoggerInterface $logger) {
+  public function __construct(UrlEmbedInterface $url_embed, FormBuilderInterface $form_builder) {
+    $this->setUrlEmbed($url_embed);
     $this->formBuilder = $form_builder;
-    $this->logger = $logger;
   }
 
   /**
@@ -56,8 +51,8 @@ class UrlEmbedDialog extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('form_builder'),
-      $container->get('logger.factory')->get('url_embed')
+      $container->get('url_embed'),
+      $container->get('form_builder')
     );
   }
 
@@ -85,6 +80,7 @@ class UrlEmbedDialog extends FormBase {
     $form_state->set('editor', $editor);
     // Initialize URL element with form attributes, if present.
     $url_element = empty($values['attributes']) ? array() : $values['attributes'];
+    $url_element += empty($input['attributes']) ? array() : $input['attributes'];
     // The default values are set directly from \Drupal::request()->request,
     // provided by the editor plugin opening the dialog.
     if (!$form_state->get('url_element')) {
@@ -93,7 +89,9 @@ class UrlEmbedDialog extends FormBase {
     $url_element += $form_state->get('url_element');
     $url_element += array(
       'data-embed-url' => '',
+      'data-url-provider' => '',
     );
+    $form_state->set('url_element', $url_element);
 
     $form['#tree'] = TRUE;
     $form['#attached']['library'][] = 'editor/drupal.editor.dialog';
@@ -106,6 +104,30 @@ class UrlEmbedDialog extends FormBase {
       '#default_value' => $url_element['data-embed-url'],
       '#required' => TRUE,
     );
+
+    try {
+      if (!empty($url_element['data-embed-url']) && $info = $this->urlEmbed()->getEmbed($url_element['data-embed-url'])) {
+        $url_element['data-url-provider'] = $info->getProviderName();
+      }
+    }
+    catch (\Exception $e) {
+      watchdog_exception('url_embed', $e);
+    }
+
+    $form['attributes']['data-url-provider'] = array(
+      '#type' => 'value',
+      '#value' => $url_element['data-url-provider'],
+    );
+
+    $form['attributes']['data-embed-button'] = array(
+      '#type' => 'value',
+      '#value' => $embed_button->id(),
+    );
+    $form['attributes']['data-entity-label'] = array(
+      '#type' => 'value',
+      '#value' => $embed_button->label(),
+    );
+
     $form['actions'] = array(
       '#type' => 'actions',
     );
@@ -118,11 +140,6 @@ class UrlEmbedDialog extends FormBase {
         'callback' => '::submitForm',
         'event' => 'click',
       ),
-    );
-
-    $form['attributes']['data-embed-button'] = array(
-      '#type' => 'value',
-      '#value' => $embed_button->id(),
     );
 
     return $form;
