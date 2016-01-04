@@ -9,6 +9,26 @@ use Drupal\embed\Entity\EmbedButton;
 use Drupal\Core\Utility\UpdateException;
 
 /**
+ * Implements hook_requirements().
+ *
+ * Checks that the necessary libraries have been installed.
+ */
+function url_embed_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'install') {
+    if (!class_exists('\Embed\Embed')) {
+      $requirements['url_embed_library'] = [
+        'description' => t("URL Embed requires the Embed/Embed library."),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  return $requirements;
+}
+
+/**
  * Convert URL embed buttons to embed buttons.
  *
  * @todo Can we reuse the existing UUID and save before deleting the old button?
