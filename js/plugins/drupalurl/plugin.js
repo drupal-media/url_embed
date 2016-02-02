@@ -27,8 +27,8 @@
 
       // Generic command for adding/editing entities of all types.
       editor.addCommand('editdrupalurl', {
-        allowedContent: 'drupal-url[*]',
-        requiredContent: 'drupal-url[*]',
+        allowedContent: 'drupal-url[data-embed-url]',
+        requiredContent: 'drupal-url[data-embed-url]',
         modes: { wysiwyg : 1 },
         canUndo: true,
         exec: function (editor, data) {
@@ -83,8 +83,8 @@
       // Register the URL embed widget.
       editor.widgets.add('drupalurl', {
         // Minimum HTML which is required by this widget to work.
-        allowedContent: 'drupal-url[*]',
-        requiredContent: 'drupal-url[*]',
+        allowedContent: 'drupal-url[data-embed-url]',
+        requiredContent: 'drupal-url[data-embed-url]',
 
         // Simply recognize the element as our own. The inner markup if fetched
         // and inserted the init() callback, since it requires the actual DOM

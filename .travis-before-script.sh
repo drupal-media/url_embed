@@ -16,6 +16,10 @@ git clone --depth 1 --branch 8.x-1.x http://git.drupal.org/project/composer_mana
 # Note: This function is re-entrant.
 drupal_ti_ensure_module_linked
 
+# Remove the gastonjs library before running drupal-rebuild until
+# https://www.drupal.org/node/2652142 is fixed.
+rm -rf $DRUPAL_TI_DRUPAL_DIR/vendor/jcalderonzumba/gastonjs
+
 # Initialize composer manager.
 php "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH/composer_manager/scripts/init.php"
 composer drupal-rebuild
