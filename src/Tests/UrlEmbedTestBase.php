@@ -36,9 +36,19 @@ abstract class UrlEmbedTestBase extends WebTestBase {
   const FLICKR_URL = 'http://www.flickr.com/photos/bees/2341623661/';
 
   /**
-   * The expected output of the Flickr URL.
+   * The expected output of the Flickr URL in a link field.
    */
-  const FLICKR_OUTPUT = '<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by ‮‭‬bees‬, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a><script async="" src="https://embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>';
+  const FLICKR_OUTPUT_FIELD = '<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by ‮‭‬bees‬, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193"></a><script async src="https://embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>';
+
+  /**
+   * The expected output of the Flickr URL in a WYSIWYG.
+   *
+   * Embeds rendered via the url_embed filter generate XHTML4 markup due to
+   * deficiencies with libxml2.
+   *
+   * @todo Remove once https://www.drupal.org/node/1333730 lands.
+   */
+  const FLICKR_OUTPUT_WYSIWYG = '<a data-flickr-embed="true" href="https://www.flickr.com/photos/bees/2341623661/" title="ZB8T0193 by ‮‭‬bees‬, on Flickr"><img src="https://farm4.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg" width="1024" height="683" alt="ZB8T0193" /></a><script async="" src="https://embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>';
 
   /**
    * A set up for all tests.
