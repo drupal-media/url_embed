@@ -29,7 +29,7 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
     $settings['body'] = array(array('value' => $content, 'format' => 'custom_format'));
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
-    $this->assertRaw(static::FLICKR_OUTPUT);
+    $this->assertRaw(static::FLICKR_OUTPUT_WYSIWYG);
     $this->assertNoText(strip_tags($content), 'Placeholder does not appear in the output when embed is successful.');
 
     // Ensure that placeholder is not replaced when embed is unsuccessful.
