@@ -53,6 +53,35 @@ class UrlEmbedDialogTest extends UrlEmbedTestBase {
   }
 
   /**
+   * Tests the URL embed button markup.
+   */
+  public function testUrlEmbedButtonMarkup() {
+    // Ensure that the route is not accessible with text format without the
+    // button configured.
+    $this->getEmbedDialog('plain_text', 'url');
+    $this->assertResponse(404, 'Embed dialog is not accessible with a filter that does not have an editor configuration.');
+    // Add an empty configuration for the plain_text editor configuration.
+    $editor = Editor::create([
+      'format' => 'plain_text',
+      'editor' => 'ckeditor',
+    ]);
+    $editor->save();
+    $this->getEmbedDialog('plain_text', 'url');
+    $this->assertResponse(403, 'Embed dialog is not accessible with a filter that does not have the embed button assigned to it.');
+    // Ensure that the route is accessible with a valid embed button.
+    // 'URL' embed button is provided by default by the module and hence the
+    // request must be successful.
+    $this->getEmbedDialog('custom_format', 'url');
+    $this->assertResponse(200, 'Embed dialog is accessible with correct filter format and embed button.');
+    // Ensure form structure of the url_embed_dialog form.
+    $this->assertFieldByName('attributes[data-embed-url]', '', 'URL field is present.');
+    // Check that 'Embed' is a primary button.
+    $this->assertFieldByXPath('//input[contains(@class, "button--primary")]', 'Embed', 'Embed is a primary button');
+    $edit = ['attributes[data-embed-url]' => static::FLICKR_URL];
+    $this->drupalPostAjaxForm(NULL, $edit, array('op' => t('Embed')));
+  }
+
+  /**
    * Retrieves an embed dialog based on given parameters.
    *
    * @param string $filter_format_id
