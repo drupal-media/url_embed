@@ -108,7 +108,7 @@
           // out-of-band assets (JS, CSS...).
           var urlEmbedPreview = Drupal.ajax({
             base: $element.attr('id'),
-            element: element,
+            element: element.$,
             url: Drupal.url('embed/preview/' + editor.config.drupal.format + '?' + $.param({
               value: element.getOuterHtml()
             })),
