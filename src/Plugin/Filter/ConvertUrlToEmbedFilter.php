@@ -28,7 +28,7 @@ class ConvertUrlToEmbedFilter extends FilterBase {
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $form['url_prefix'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('URL prefox'),
+      '#title' => $this->t('URL prefix'),
       '#default_value' => $this->settings['url_prefix'],
       '#description' => $this->t('Optional prefix that will be used to indicate which URLs that apply. All URLs that are supported will be converted if empty. Example: EMBED-https://twitter.com/drupal/status/735873777683320832'),
     ];

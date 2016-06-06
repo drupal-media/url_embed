@@ -4,7 +4,7 @@ namespace Drupal\url_embed\Tests;
 
 use Drupal\editor\Entity\Editor;
 use Drupal\filter\Entity\FilterFormat;
-use Drupal\video_embed_field\Tests\WebTestBase;
+use Drupal\simpletest\WebTestBase;
 
 /**
  * Tests the url_embed_convert_links filter.
