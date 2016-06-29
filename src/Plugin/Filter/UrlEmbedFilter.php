@@ -81,7 +81,7 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
           watchdog_exception('url_embed', $e);
         }
 
-        $this->setNodeContent($node, $url_output);
+        $this->replaceNodeContent($node, $url_output);
       }
 
       $result->setProcessedText(Html::serialize($dom));
