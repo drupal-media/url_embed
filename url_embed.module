@@ -20,5 +20,11 @@ function url_embed_theme($existing, $type, $theme, $path) {
  * Implements hook_ckeditor_css_alter().
  */
 function url_embed_ckeditor_css_alter(array &$css, Editor $editor) {
-  $css[] = drupal_get_path('module', 'url_embed') . '/css/url_embed.responsive.css';
+  $filter = $editor->getFilterFormat()->filters('url_embed');
+  $config = $filter->getConfiguration();
+
+  // Add the responsive embed css if the url_embed module has it enabled
+  if (!empty($config['settings']['enable_responsive'])) {
+    $css[] = drupal_get_path('module', 'url_embed') . '/css/url_embed.responsive.css';
+  }
 }
