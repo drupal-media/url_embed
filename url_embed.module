@@ -1,1 +1,15 @@
 <?php
+
+/**
+ * Implements hook_theme().
+ */
+function url_embed_theme($existing, $type, $theme, $path) {
+  return [
+    'responsive_embed' => [
+      'variables' => [
+        'url_output' => NULL,
+        'ratio' => NULL
+      ]
+    ],
+  ];
+}

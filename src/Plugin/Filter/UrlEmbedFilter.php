@@ -15,6 +15,8 @@ use Drupal\filter\Plugin\FilterBase;
 use Drupal\url_embed\UrlEmbedHelperTrait;
 use Drupal\url_embed\UrlEmbedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Renderer;
 
 /**
  * Provides a filter to display embedded URLs based on data attributes.
@@ -31,6 +33,14 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
   use UrlEmbedHelperTrait;
 
   /**
+   * The Renderer service.
+   *
+   * @var \Drupal\Core\Render\Renderer.
+   */
+  protected $renderer;
+
+
+  /**
    * Constructs a UrlEmbedFilter object.
    *
    * @param array $configuration
@@ -42,9 +52,10 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
    * @param \Drupal\url_embed\UrlEmbedInterface $url_embed
    *   The URL embed service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, UrlEmbedInterface $url_embed) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, UrlEmbedInterface $url_embed, Renderer $renderer) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->setUrlEmbed($url_embed);
+    $this->renderer = $renderer;
   }
 
   /**
@@ -55,7 +66,8 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('url_embed')
+      $container->get('url_embed'),
+      $container->get('renderer')
     );
   }
 
@@ -67,18 +79,37 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
     if (strpos($text, 'data-embed-url') !== FALSE) {
       $dom = Html::load($text);
       $xpath = new \DOMXPath($dom);
+      $config = $this->getConfiguration();
 
       foreach ($xpath->query('//drupal-url[@data-embed-url]') as $node) {
         /** @var \DOMElement $node */
         $url = $node->getAttribute('data-embed-url');
         $url_output = '';
+        $ratio = '';
         try {
           if ($info = $this->urlEmbed()->getEmbed($url)) {
             $url_output = $info->getCode();
+            $ratio = $info->aspectRatio;
           }
         }
         catch (\Exception $e) {
           watchdog_exception('url_embed', $e);
+        }
+
+        // Wrap the embed code in a container to make it responsive
+        if ($ratio && !empty($config['settings']['enable_responsive'])) {
+          $responsive_embed = [
+            '#theme' => 'responsive_embed',
+            '#ratio' => $ratio,
+            '#url_output' => $url_output,
+            '#attached' => array(
+              'library' =>  array(
+                'url_embed/url_embed.responsive_styles'
+              ),
+            ),
+          ];
+
+          $url_output = $this->renderer->render($responsive_embed);
         }
 
         $this->replaceNodeContent($node, $url_output);
@@ -103,6 +134,22 @@ class UrlEmbedFilter extends FilterBase implements ContainerFactoryPluginInterfa
     else {
       return $this->t('You can embed URLs.');
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $config = $this->getConfiguration();
+
+    $form['enable_responsive'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Responsive Wrappers'),
+      '#description' => $this->t('Automatically wrap embedded iframes with a container which will allow the embedded media to scale appropriately to the size of the page.'),
+      '#default_value' => !empty($config['settings']['enable_responsive']) ? $config['settings']['enable_responsive'] : FALSE,
+    );
+
+    return $form;
   }
 
 }
