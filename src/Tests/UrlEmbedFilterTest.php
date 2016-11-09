@@ -7,6 +7,8 @@
 
 namespace Drupal\url_embed\Tests;
 
+use Drupal\filter\Entity\FilterFormat;
+
 /**
  * Tests the url_embed filter.
  *
@@ -60,6 +62,25 @@ class UrlEmbedFilterTest extends UrlEmbedTestBase {
     $node = $this->drupalCreateNode($settings);
     $this->drupalget('node/' . $node->id());
     $this->assertRaw('<div data-embed-url="' . static::FLICKR_URL . '"');
+
+    // Enable the settings option to use a responsive wrapper
+    $format = FilterFormat::load('custom_format');
+    $configuration = $format->filters('url_embed')->getConfiguration();
+    $configuration['settings']['enable_responsive'] = '1';
+    $format->setFilterConfig('url_embed', $configuration);
+    $format->save();
+
+    // Tests responsive url embed using sample flickr url.
+    $content = '<drupal-url data-embed-url="' . static::FLICKR_URL . '">This placeholder should not be rendered.</drupal-url>';
+    $settings = array();
+    $settings['type'] = 'page';
+    $settings['title'] = 'Test responsive url embed with sample Flickr url';
+    $settings['body'] = array(array('value' => $content, 'format' => 'custom_format'));
+    $node = $this->drupalCreateNode($settings);
+    $this->drupalGet('node/' . $node->id());
+    $this->assertRaw('<div class="responsive-embed" style="padding-bottom: 66.699%">' . static::FLICKR_OUTPUT_WYSIWYG . '</div>');
+    $this->assertNoText(strip_tags($content), 'Placeholder does not appear in the output when embed is successful.');
+
   }
 
 }
