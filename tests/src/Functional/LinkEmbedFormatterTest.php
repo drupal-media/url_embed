@@ -1,16 +1,11 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\url_embed\Tests\LinkEmbedFormatterTest.
- */
-
-namespace Drupal\url_embed\Tests;
+namespace Drupal\Tests\url_embed\Functional;
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\link\LinkItemInterface;
-use Drupal\link\Tests\LinkFieldTest;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\url_embed\Tests\UrlEmbedTestBase;
 
 /**
@@ -18,14 +13,21 @@ use Drupal\url_embed\Tests\UrlEmbedTestBase;
  *
  * @group url_embed
  */
-class LinkEmbedFormatterTest extends LinkFieldTest{
+class LinkEmbedFormatterTest extends BrowserTestBase {
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = array('url_embed');
+  public static $modules = ['url_embed', 'entity_test', 'link'];
+
+  /**
+   * A field to use in this test class.
+   *
+   * @var \Drupal\field\Entity\FieldStorageConfig
+   */
+  protected $fieldStorage;
 
   /**
    * Tests the 'url_embed' formatter.
@@ -68,7 +70,35 @@ class LinkEmbedFormatterTest extends LinkFieldTest{
     $entity->save();
 
     // Render the entity and verify that the link is output as an embed.
-    $this->renderTestEntity($entity->id());
-    $this->assertRaw(UrlEmbedTestBase::FLICKR_OUTPUT_FIELD);
+    $output = $this->renderTestEntity($entity->id());
+    $this->assertContains(UrlEmbedTestBase::FLICKR_OUTPUT_FIELD, $output);
   }
+
+  /**
+   * Renders a test_entity and returns the output.
+   *
+   * @param int $id
+   *   The test_entity ID to render.
+   * @param string $view_mode
+   *   (optional) The view mode to use for rendering.
+   * @param bool $reset
+   *   (optional) Whether to reset the entity_test storage cache. Defaults to
+   *   TRUE to simplify testing.
+   *
+   * @return string
+   *   The rendered HTML output.
+   */
+  protected function renderTestEntity($id, $view_mode = 'full', $reset = TRUE) {
+    if ($reset) {
+      $this->container->get('entity_type.manager')->getStorage('entity_test')->resetCache([$id]);
+    }
+    $entity = EntityTest::load($id);
+    $display = entity_get_display($entity->getEntityTypeId(), $entity->bundle(), $view_mode);
+    $content = $display->build($entity);
+    $output = \Drupal::service('renderer')->renderRoot($content);
+    $output = (string) $output;
+    $this->verbose($output);
+    return $output;
+  }
+
 }
