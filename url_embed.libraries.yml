@@ -1,0 +1,5 @@
+url_embed.responsive_styles:
+  version: VERSION
+  css:
+    component:
+      css/url_embed.responsive.css: {}
